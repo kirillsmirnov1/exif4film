@@ -10,13 +10,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class Main {
 
-    // TODO read photo file names
     // TODO add exif
     // TODO terminal arguments
 
@@ -26,20 +25,25 @@ public class Main {
     public static void main(String[] args) {
 
         Exposure[] exposures = parseXML();
-        List<String> photos = findPhotos(); // TODO HashMap
+        Map<Integer, String> photos = findPhotos();
 
         return;
     }
 
-    private static List<String> findPhotos() {
+    private static Map<Integer, String> findPhotos() {
 
         try(Stream<Path> walk = Files.walk(Paths.get(photoDir))){
 
-            return walk
-                    .filter(Files::isRegularFile)
-                    .map(Path::toString)
-                    .filter(x -> x.contains(".jpg")) // TODO others
-                    .collect(Collectors.toList());
+            Map<Integer, String> result = new HashMap<>();
+            int[] i = {0};
+
+            walk
+                .filter(Files::isRegularFile)
+                .map(Path::toString)
+                .filter(x -> x.contains(".jpg")) // TODO others
+                .forEach(str -> result.put(i[0]++, str));
+
+            return result;
 
         } catch (IOException e) {
             e.printStackTrace();
