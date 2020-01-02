@@ -1,3 +1,13 @@
+import org.apache.commons.imaging.ImageReadException;
+import org.apache.commons.imaging.ImageWriteException;
+import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.common.ImageMetadata;
+import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
+import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
+import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
+import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
+import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
+import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -5,8 +15,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +38,48 @@ public class Main {
         Exposure[] exposures = parseXML();
         Map<Integer, String> photos = findPhotos();
 
+        setPhotoMetadata(photos.get(1), exposures[0]);
+
         return;
+    }
+
+    // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
+    private static void setPhotoMetadata(String photo, Exposure exposureData) {
+
+        File file = new File(photo);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+
+        try (FileOutputStream fos = new FileOutputStream(file);
+             OutputStream os = new BufferedOutputStream(fos)){
+
+            TiffOutputSet outputSet = null;
+
+            final ImageMetadata metadata = Imaging.getMetadata(file);
+            final JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
+
+            if(jpegMetadata != null){
+                final TiffImageMetadata exif = jpegMetadata.getExif();
+
+                if(exif != null){
+                    outputSet = exif.getOutputSet();
+                }
+            }
+
+            if(outputSet == null){
+                outputSet = new TiffOutputSet();
+            }
+
+            final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+
+            exifDirectory.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
+            exifDirectory.add(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, sdf.format(exposureData.time));
+
+            new ExifRewriter().updateExifMetadataLossless(file, os,
+                    outputSet);
+
+        } catch (IOException | ImageReadException | ImageWriteException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Map<Integer, String> findPhotos() {
