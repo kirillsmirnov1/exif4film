@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -55,6 +57,7 @@ public class Main {
     private static Exposure[] parseXML() {
 
         File file = new File(xmlFile);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         try {
             Document doc = DocumentBuilderFactory
@@ -82,9 +85,12 @@ public class Main {
                 exposuresData[i] = new Exposure();
 
                 String number = exposure.getElementsByTagName("exposure_number").item(0).getFirstChild().getTextContent();
+                String date = exposure.getElementsByTagName("exposure_time_taken").item(0).getFirstChild().getTextContent();
+                date = date.replace("T", " ");
+                date = date.replaceAll("Z...", "");
 
                 exposuresData[i].number = Integer.parseInt(number);
-                exposuresData[i].time = exposure.getElementsByTagName("exposure_time_taken").item(0).getFirstChild().getTextContent();
+                exposuresData[i].time = sdf.parse(date);
                 exposuresData[i].description = exposure.getElementsByTagName("exposure_description").item(0).getFirstChild().getTextContent();
             }
 
@@ -95,6 +101,8 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 

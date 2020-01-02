@@ -1,6 +1,8 @@
+import java.util.Date;
+
 class Exposure {
     int number;
 
-    String time;
+    Date time;
     String description;
 }
