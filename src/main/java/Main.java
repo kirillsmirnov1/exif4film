@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 public class Main {
@@ -38,9 +39,30 @@ public class Main {
         Exposure[] exposures = parseXML();
         Map<Integer, String> photos = findPhotos();
 
-        setPhotoMetadata(photos.get(1), exposures[0]);
+        matchPhotosWithMetadata(photos, exposures);
+    }
 
-        return;
+    private static void matchPhotosWithMetadata(Map<Integer, String> photos, Exposure[] exposures) {
+        Scanner scanner = new Scanner(System.in);
+
+        for(Exposure exposure : exposures){
+
+            System.out.println(exposure.toString());
+
+            System.out.println("Choose photo for this exposure: ");
+
+            System.out.println(photos.toString().replaceAll(", ", "\n").replaceAll("=", " : "));
+
+            int photo = scanner.nextInt();
+
+            if(photos.containsKey(photo)) {
+                setPhotoMetadata(photos.get(photo), exposure);
+
+                photos.remove(photo);
+            } else {
+                System.out.println("Wrong photo index, missing that exposure");
+            }
+        }
     }
 
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
