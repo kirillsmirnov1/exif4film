@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 public class Main {
 
-    // TODO cycle
+    // TODO process unprocessed files
     // TODO terminal arguments
 
     private static String xmlFile = "/home/kirill/Downloads/film5/roll.xml";
