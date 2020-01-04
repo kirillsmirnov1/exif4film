@@ -71,9 +71,11 @@ public class Main {
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
     private static void setPhotoMetadata(String photo, Exposure exposureData) {
 
-        String destDir = photo.substring(0, photo.lastIndexOf("/") + 1) + "output/";
+        String destDir = photoDir + "/result/";
+        String processedDir = photoDir + "/processed/";
 
         new File(destDir).mkdirs();
+        new File(processedDir).mkdirs();
 
         String photoName = String.format("%02d", exposureData.number) + "_" + exposureData.description;
 
@@ -109,6 +111,8 @@ public class Main {
 
             new ExifRewriter().updateExifMetadataLossless(file, os,
                     outputSet);
+
+            file.renameTo(new File(processedDir + file.getName()));
 
         } catch (IOException | ImageReadException | ImageWriteException e) {
             e.printStackTrace();
