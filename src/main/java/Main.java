@@ -21,9 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Main {
@@ -117,12 +115,13 @@ public class Main {
         try(Stream<Path> walk = Files.walk(Paths.get(photoDir))){
 
             Map<Integer, String> result = new HashMap<>();
-            int[] i = {0};
+            int[] i = {1};
 
             walk
                 .filter(Files::isRegularFile)
                 .map(Path::toString)
                 .filter(x -> x.contains(".jpg")) // TODO others
+                .sorted()
                 .forEach(str -> result.put(i[0]++, str));
 
             return result;
