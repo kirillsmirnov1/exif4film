@@ -45,11 +45,16 @@ public class Main {
 
         for(Exposure exposure : exposures){
 
-            System.out.println(exposure.toString());
+            System.out.println("\n" + exposure.toString() + "\n");
 
             System.out.println("Choose photo for this exposure: ");
 
-            System.out.println(photos.toString().replaceAll(", ", "\n").replaceAll("=", " : "));
+            String availablePhotos = photos.toString()
+                    .replaceAll("[{}]", "")
+                    .replaceAll(", ", "\n")
+                    .replaceAll("=", " : ");
+
+            System.out.println(availablePhotos);
 
             int photo = scanner.nextInt();
 
