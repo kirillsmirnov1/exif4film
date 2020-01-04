@@ -50,7 +50,9 @@ public class Main {
 
         new File(destDir).mkdirs();
 
-        File dest = new File(destDir + exposureData.number + ".jpg");
+        String photoName = String.format("%02d", exposureData.number) + "_" + exposureData.description;
+
+        File dest = new File(destDir + photoName + ".jpg");
 
         File file = new File(photo);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
