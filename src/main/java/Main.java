@@ -46,10 +46,12 @@ public class Main {
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
     private static void setPhotoMetadata(String photo, Exposure exposureData) {
 
+        File dest = new File(photo.substring(0, photo.lastIndexOf("/") + 1) + exposureData.number + ".jpg");
+
         File file = new File(photo);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
 
-        try (FileOutputStream fos = new FileOutputStream(file);
+        try (FileOutputStream fos = new FileOutputStream(dest);
              OutputStream os = new BufferedOutputStream(fos)){
 
             TiffOutputSet outputSet = null;
