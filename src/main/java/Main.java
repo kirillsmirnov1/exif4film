@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 public class Main {
 
+    // TODO cut photos names in output
+
     // TODO process unprocessed files
         // TODO another round with leftovers
         // TODO save unused xml data
