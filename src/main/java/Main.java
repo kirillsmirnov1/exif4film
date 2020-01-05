@@ -121,7 +121,7 @@ public class Main {
 
     private static Map<Integer, String> findPhotos() {
 
-        try(Stream<Path> walk = Files.walk(Paths.get(photoDir))){
+        try(Stream<Path> walk = Files.walk(Paths.get(photoDir), 1)){
 
             Map<Integer, String> result = new HashMap<>();
             int[] i = {1};
