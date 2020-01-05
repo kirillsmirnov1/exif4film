@@ -29,7 +29,7 @@ public class Main {
     private static String photoDir;
     private static String xmlFile;
 
-    private static String destDir;
+    private static String destinationDir;
     private static String processedDir;
 
     public static void main(String[] args) {
@@ -87,10 +87,10 @@ public class Main {
 
         // Preparing other paths
 
-        destDir = photoDir + "result/";
+        destinationDir = photoDir + "result/";
         processedDir = photoDir + "processed/";
 
-        new File(destDir).mkdirs();
+        new File(destinationDir).mkdirs();
         new File(processedDir).mkdirs();
 
         return true;
@@ -129,7 +129,7 @@ public class Main {
 
         String photoName = String.format("%02d", exposureData.number) + "_" + exposureData.description;
 
-        File dest = new File(destDir + photoName + ".jpg");
+        File dest = new File(destinationDir + photoName + ".jpg");
 
         File file = new File(photo);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
