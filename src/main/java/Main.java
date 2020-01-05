@@ -26,15 +26,74 @@ public class Main {
     // TODO process unprocessed files
     // TODO terminal arguments
 
-    private static String xmlFile = "/home/kirill/Downloads/film5/roll.xml";
-    private static String photoDir = "/home/kirill/Downloads/film5";
+    private static String photoDir;
+    private static String xmlFile;
+
+    private static String destDir;
+    private static String processedDir;
 
     public static void main(String[] args) {
 
-        Exposure[] exposures = parseXML();
-        Map<Integer, String> photos = findPhotos();
+        if(initPaths()) {
 
-        matchPhotosWithMetadata(photos, exposures);
+            Exposure[] exposures = parseXML();
+            Map<Integer, String> photos = findPhotos();
+
+            matchPhotosWithMetadata(photos, exposures);
+        }
+    }
+
+    private static boolean initPaths() {
+
+        // Reading init file
+
+        String initFileName = "init";
+
+        try(FileReader fileReader = new FileReader(initFileName);
+            BufferedReader reader = new BufferedReader(fileReader)){
+
+            reader.lines()
+                    .forEach(str -> {
+                        String[] tokens = str.split(" ");
+                        switch (tokens[0]){
+                            case "photoDir:":
+                                photoDir = tokens[1];
+                                break;
+                            case "xmlFile:":
+                                xmlFile = tokens[1];
+                                break;
+                        }
+                    });
+
+
+        } catch (IOException e) {
+            System.out.println("Couldn't read init file");
+            e.printStackTrace();
+
+            return false;
+        }
+
+        // Checking files
+
+        if(! new File(photoDir).isDirectory()){
+            System.out.println(photoDir + " doesn't look like a directory");
+            return false;
+        }
+
+        if(! ( new File(xmlFile).isFile() && xmlFile.endsWith(".xml") ) ){
+            System.out.println(xmlFile + " doesn't look line an xml file");
+            return false;
+        }
+
+        // Preparing other paths
+
+        destDir = photoDir + "result/";
+        processedDir = photoDir + "processed/";
+
+        new File(destDir).mkdirs();
+        new File(processedDir).mkdirs();
+
+        return true;
     }
 
     private static void matchPhotosWithMetadata(Map<Integer, String> photos, Exposure[] exposures) {
@@ -67,12 +126,6 @@ public class Main {
 
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
     private static void setPhotoMetadata(String photo, Exposure exposureData) {
-
-        String destDir = photoDir + "/result/";
-        String processedDir = photoDir + "/processed/";
-
-        new File(destDir).mkdirs();
-        new File(processedDir).mkdirs();
 
         String photoName = String.format("%02d", exposureData.number) + "_" + exposureData.description;
 
