@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 public class Main {
 
     // TODO process unprocessed files
-    // TODO terminal arguments
 
     private static String photoDir;
     private static String xmlFile;
