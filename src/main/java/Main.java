@@ -130,12 +130,7 @@ public class Main {
 
             System.out.println("Choose photo for this exposure: ");
 
-            String availablePhotos = photos.toString()
-                    .replaceAll("[{}]", "")
-                    .replaceAll(", ", "\n")
-                    .replaceAll("=", " : ");
-
-            System.out.println(availablePhotos);
+            printPhotoNamesWithIndexes(photos);
 
             int photo = scanner.nextInt();
 
@@ -147,6 +142,16 @@ public class Main {
                 System.out.println("Wrong photo index, missing that exposure");
             }
         }
+    }
+
+    private static void printPhotoNamesWithIndexes(Map<Integer, String> photos) {
+        // FIXME this transformation should be done only once
+        // TODO also why not store files in that map?
+        photos.entrySet().stream().forEach(entry ->
+            System.out.println(
+                String.format("%02d", entry.getKey()) + " : " +
+                entry.getValue().substring(entry.getValue().lastIndexOf("/") + 1))
+        );
     }
 
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
