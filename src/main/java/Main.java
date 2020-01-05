@@ -24,6 +24,11 @@ import java.util.stream.Stream;
 public class Main {
 
     // TODO process unprocessed files
+        // TODO another round with leftovers
+        // TODO save unused xml data
+        // TODO stop cycle when there is no more photos left
+        // TODO read camera data
+        // TODO offer filling photo exif data manually
 
     private static String photoDir;
     private static String xmlFile;
