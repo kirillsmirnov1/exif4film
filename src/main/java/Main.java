@@ -103,8 +103,18 @@ public class Main {
         destinationDir = photoDir + "result/";
         processedDir = photoDir + "processed/";
 
-        new File(destinationDir).mkdirs();
-        new File(processedDir).mkdirs();
+        File dest = new File(destinationDir);
+        File proc = new File(processedDir);
+
+        //noinspection ResultOfMethodCallIgnored
+        dest.mkdirs();
+        //noinspection ResultOfMethodCallIgnored
+        proc.mkdirs();
+
+        if( ! ( dest.isDirectory() && proc.isDirectory() )){
+            System.out.println("Couldn't create output dirs");
+            return false;
+        }
 
         return true;
     }
