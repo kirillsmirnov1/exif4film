@@ -41,10 +41,18 @@ public class Main {
 
         if(initPaths()) {
 
+            // Prepare data
             Exposure[] exposures = parseXML();
             Map<Integer, String> photos = findPhotos();
+            if(exposures == null || photos == null){ return; }
 
-            matchPhotosWithMetadata(photos, exposures);
+            // Match data
+            if(exposures.length > 0 && photos.size() > 0) {
+                matchPhotosWithMetadata(photos, exposures);
+            } else {
+                System.out.println("No data to match");
+            }
+
         }
     }
 
@@ -194,6 +202,8 @@ public class Main {
             e.printStackTrace();
         }
 
+        System.out.println("Couldn't parse photo paths");
+
         return null;
     }
 
@@ -243,6 +253,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        System.out.println("Couldn't read exposures");
 
         return null;
     }
