@@ -187,7 +187,9 @@ public class Main {
             new ExifRewriter().updateExifMetadataLossless(file, os,
                     outputSet);
 
-            file.renameTo(new File(processedDir + file.getName()));
+            if(!file.renameTo(new File(processedDir + file.getName()))){
+                System.out.println("Couldn't move " + file.getName() + " to processed/");
+            }
 
         } catch (IOException | ImageReadException | ImageWriteException e) {
             e.printStackTrace();
