@@ -153,7 +153,7 @@ public class Main {
 
             printPhotoNamesWithIndexes(photos);
 
-            int photo = scanner.nextInt();
+            int photo = Integer.parseInt(scanner.nextLine());
 
             if(photos.containsKey(photo)) {
                 setPhotoMetadata(photos.get(photo), exposure);
@@ -163,6 +163,8 @@ public class Main {
                 System.out.println("Wrong photo index, missing that exposure");
             }
         }
+
+        scanner.close();
     }
 
     private static void printPhotoNamesWithIndexes(Map<Integer, String> photos) {
