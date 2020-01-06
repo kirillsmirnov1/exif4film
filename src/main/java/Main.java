@@ -49,12 +49,33 @@ public class Main {
             if(exposures == null || photos == null){ return; }
 
             // Match data
-            if(exposures.length > 0 && photos.size() > 0) {
-                matchPhotosWithMetadata(photos, exposures);
-            } else {
-                System.out.println("No data to match");
-            }
+            matchingCycle(exposures, photos);
 
+        }
+    }
+
+    private static void matchingCycle(Exposure[] exposures, Map<Integer, String> photos) {
+
+        while (true) {
+            matchPhotosWithMetadata(photos, exposures);
+
+            // TODO delete used exposures
+            if(exposures.length > 0 && photos.size() > 0){
+                System.out.println(
+                        "There is " + exposures.length + " exposures and " + photos.size() + " photos left. " +
+                                "\nMatch them? [y/n]");
+
+                // FIXME for some reason throws NoSuchElementException
+                Scanner scanner = new Scanner(System.in);
+                String answer = scanner.nextLine();
+                scanner.close();
+
+                if(!answer.equals("y")){
+                    break;
+                }
+            } else {
+                break;
+            }
         }
     }
 
