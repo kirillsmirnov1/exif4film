@@ -149,7 +149,7 @@ public class Main {
 
             System.out.println("\n" + exposure.toString() + "\n");
 
-            System.out.println("Choose photo for this exposure: ");
+            System.out.println("Choose photo for this exposure: \n0 to skip\n");
 
             printPhotoNamesWithIndexes(photos);
 
