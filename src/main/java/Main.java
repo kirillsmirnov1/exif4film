@@ -282,9 +282,12 @@ public class Main {
                 date = date.replace("T", " ");
                 date = date.replaceAll("Z...", "");
 
-                String description = getElementText(exposure, "exposure_description");
-
-                exposuresData[i] = new Exposure(i, sdf.parse(date), description);
+                exposuresData[i] = new Exposure(
+                        i,
+                        sdf.parse(date),
+                        getElementText(exposure, "exposure_description"),
+                        getElementText(exposure, "exposure_aperture"),
+                        getElementText(exposure, "exposure_shutter_speed"));
             }
 
             return exposuresData;
