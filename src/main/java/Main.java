@@ -2,6 +2,7 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
+import org.apache.commons.imaging.common.RationalNumber;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
@@ -212,6 +213,14 @@ public class Main {
             exifDirectory.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
             exifDirectory.add(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, sdf.format(exposureData.getTime()));
 
+            if(exposureData.getAperture() != null) {
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_APERTURE_VALUE, RationalNumber.valueOf(exposureData.getAperture()));
+            }
+
+            if(exposureData.getShutterSpeed() != null) {
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_SHUTTER_SPEED_VALUE, RationalNumber.valueOf(exposureData.getShutterSpeed()));
+            }
+
             new ExifRewriter().updateExifMetadataLossless(file, os,
                     outputSet);
 
@@ -286,8 +295,8 @@ public class Main {
                         i,
                         sdf.parse(date),
                         getElementText(exposure, "exposure_description"),
-                        getElementText(exposure, "exposure_aperture"),
-                        getElementText(exposure, "exposure_shutter_speed"));
+                        getElementDouble(exposure, "exposure_aperture"),
+                        getElementDouble(exposure, "exposure_shutter_speed"));
             }
 
             return exposuresData;
@@ -306,6 +315,21 @@ public class Main {
             return exposure.getElementsByTagName(tagName).item(0).getFirstChild().getTextContent();
         } catch (Exception e){
             return "";
+        }
+    }
+
+    private static Double getElementDouble(Element exposure, String tagName) {
+        String elementText = getElementText(exposure, tagName);
+
+        if(elementText.contains("/")){
+            String[] parts = elementText.split("/");
+            return Double.parseDouble(parts[0])/Double.parseDouble(parts[1]);
+        }
+
+        try {
+            return Double.parseDouble(elementText);
+        } catch (Exception e){
+            return null;
         }
     }
 }
