@@ -180,7 +180,7 @@ public class Main {
     // based on https://github.com/apache/commons-imaging/blob/master/src/test/java/org/apache/commons/imaging/examples/WriteExifMetadataExample.java
     private static void setPhotoMetadata(String photo, Exposure exposureData) {
 
-        String photoName = String.format("%02d", exposureData.number) + "_" + exposureData.description;
+        String photoName = String.format("%02d", exposureData.getNumber()) + "_" + exposureData.getDescription();
 
         File dest = new File(destinationDir + photoName + ".jpg");
 
@@ -210,7 +210,7 @@ public class Main {
             final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
 
             exifDirectory.removeField(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL);
-            exifDirectory.add(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, sdf.format(exposureData.time));
+            exifDirectory.add(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, sdf.format(exposureData.getTime()));
 
             new ExifRewriter().updateExifMetadataLossless(file, os,
                     outputSet);
@@ -277,17 +277,14 @@ public class Main {
             for(int i = 0; i < numberOfExposures; ++i){
                 Element exposure = (Element) exposures.item(i);
 
-                exposuresData[i] = new Exposure();
-
                 String date = getElementText(exposure, "exposure_time_taken");
 
                 date = date.replace("T", " ");
                 date = date.replaceAll("Z...", "");
 
-                exposuresData[i].number = i;
-                exposuresData[i].time = sdf.parse(date);
+                String description = getElementText(exposure, "exposure_description");
 
-                exposuresData[i].description = getElementText(exposure, "exposure_description");
+                exposuresData[i] = new Exposure(i, sdf.parse(date), description);
             }
 
             return exposuresData;

@@ -1,15 +1,7 @@
-import java.util.Date;
+import java.util.*
 
-class Exposure {
-    int number;
-
-    Date time;
-    String description;
-
-    @Override
-    public String toString() {
-        return "Exposure № " + String.format("%02d", number) + "\n" +
-                time.toString() + "\n" +
-                description;
-    }
-}
+data class Exposure(
+        val number: Int,
+        val time: Date? = null,
+        val description: String? = null
+)
