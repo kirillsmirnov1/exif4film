@@ -299,4 +299,12 @@ public class Main {
 
         return null;
     }
+
+    private static String getElementText(Element exposure, String tagName) {
+        try{
+            return exposure.getElementsByTagName(tagName).item(0).getFirstChild().getTextContent();
+        } catch (Exception e){
+            return "";
+        }
+    }
 }
