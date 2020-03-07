@@ -214,11 +214,13 @@ public class Main {
             exifDirectory.add(ExifTagConstants.EXIF_TAG_DATE_TIME_ORIGINAL, sdf.format(exposureData.getTime()));
 
             if(exposureData.getAperture() != null) {
-                exifDirectory.add(ExifTagConstants.EXIF_TAG_APERTURE_VALUE, RationalNumber.valueOf(exposureData.getAperture()));
+                RationalNumber aperture = RationalNumber.valueOf(exposureData.getAperture());
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_APERTURE_VALUE, aperture);
             }
 
             if(exposureData.getShutterSpeed() != null) {
-                exifDirectory.add(ExifTagConstants.EXIF_TAG_SHUTTER_SPEED_VALUE, RationalNumber.valueOf(exposureData.getShutterSpeed()));
+                RationalNumber shutterSpeed = RationalNumber.valueOf(exposureData.getShutterSpeed());
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_SHUTTER_SPEED_VALUE, shutterSpeed);
             }
 
             new ExifRewriter().updateExifMetadataLossless(file, os,
