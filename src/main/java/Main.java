@@ -215,12 +215,12 @@ public class Main {
 
             if(exposureData.getAperture() != null) {
                 RationalNumber aperture = RationalNumber.valueOf(exposureData.getAperture());
-                exifDirectory.add(ExifTagConstants.EXIF_TAG_APERTURE_VALUE, aperture);
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_FNUMBER, aperture);
             }
 
             if(exposureData.getShutterSpeed() != null) {
                 RationalNumber shutterSpeed = RationalNumber.valueOf(exposureData.getShutterSpeed());
-                exifDirectory.add(ExifTagConstants.EXIF_TAG_SHUTTER_SPEED_VALUE, shutterSpeed);
+                exifDirectory.add(ExifTagConstants.EXIF_TAG_EXPOSURE_TIME, shutterSpeed);
             }
 
             new ExifRewriter().updateExifMetadataLossless(file, os,
